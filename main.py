@@ -1,6 +1,5 @@
 import sys
 import pygame
-import time
 
 
 def getclick():
