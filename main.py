@@ -1,8 +1,16 @@
+"""
+Missionaries and Cannibals game developed for
+Scripting Languages using pygame
+"""
 import sys
 import pygame
 
 
 def getclick():
+    """
+    Returns the actor clicked
+    on the screen
+    """
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
@@ -17,6 +25,10 @@ def getclick():
 
 
 def ferry(who):
+    """
+    Moves the boat and
+    the actors mounted on it
+    """
     done = False
     for actor in who:
         actor["rect"] = actor["rect"].move((step, 0))
@@ -28,6 +40,9 @@ def ferry(who):
 
 
 def failure():
+    """
+    Handles game failure
+    """
     myfont = pygame.font.Font('freesansbold.ttf', 48)
     msg = myfont.render("Failure", True, (255, 0, 0))
     msg_box = msg.get_rect()
@@ -38,6 +53,9 @@ def failure():
 
 
 def success():
+    """
+    Handles game success
+    """
     myfont = pygame.font.Font('freesansbold.ttf', 48)
     msg = myfont.render("Win", True, (0, 255, 0))
     msg_box = msg.get_rect()
@@ -48,6 +66,10 @@ def success():
 
 
 def draw_actors():
+    """
+    Draws the actors in
+    the screen
+    """
     for i, actor in enumerate(actors):
         actor["surf"] = pygame.image.load(actor["file"])
         actor["rect"] = actor["surf"].get_rect()
@@ -60,6 +82,10 @@ def draw_actors():
 
 
 def mount(actor):
+    """
+    Mounts the actors
+    in the boat
+    """
     if boat["status"] == "right" and actor["rect"].left < WIDTH/2:
         return
     if boat["status"] == "left" and actor["rect"].right > WIDTH/2:
@@ -80,9 +106,11 @@ def mount(actor):
 
 
 def unmount(actor):
+    """
+    Unmounts the actors
+    form the boat
+    """
     match len(mounted):
-        case 0:
-            return
         case 1:
             mounted.remove(actor)
             actor["status"] = "free"
@@ -98,9 +126,14 @@ def unmount(actor):
             if boat["status"] == "right":
                 actor["rect"].midright = (arena.width, actor["start"][1])
             mounted[0]["rect"].midbottom = boat["rect"].midtop
+        case _:
+            return
 
 
 def update_screen():
+    """
+    Updates the screen
+    """
     window.blit(bg, (0, 0))
     for actor in actors:
         window.blit(actor["surf"], actor["rect"])
@@ -109,6 +142,9 @@ def update_screen():
 
 
 def move_passengers():
+    """
+    Moves the passengers
+    """
     if len(mounted) == 1:
         mounted[0]["rect"].midbottom = boat["rect"].midtop
     elif len(mounted) == 2:
@@ -117,6 +153,9 @@ def move_passengers():
 
 
 def move_boat():
+    """
+    Moves the boat
+    """
     global boat
 
     if len(mounted) == 0:
@@ -139,6 +178,10 @@ def move_boat():
 
 
 def update_graph():
+    """
+    Updates the graph and
+    the gamestate
+    """
     global gamestate
     path = ""
     for m in mounted:
@@ -200,6 +243,10 @@ def show_menu():
 
 
 def show_moves():
+    """
+    Shows on screen
+    the game moves
+    """
     text = smallfont.render(str(moves) + " move(s)", True, black)
     text_rect = text.get_rect()
     text_rect.center = (HEIGHT/4, 50)
